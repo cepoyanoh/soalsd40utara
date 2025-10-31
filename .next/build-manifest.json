@@ -1,0 +1,62 @@
+{
+  "polyfillFiles": [
+    "static/chunks/polyfills-42372ed130431b0a.js"
+  ],
+  "devFiles": [],
+  "ampDevFiles": [],
+  "lowPriorityFiles": [
+    "static/bCekToBRIayBpomr_Jymm/_buildManifest.js",
+    "static/bCekToBRIayBpomr_Jymm/_ssgManifest.js"
+  ],
+  "rootMainFiles": [],
+  "rootMainFilesTree": {},
+  "pages": {
+    "/": [
+      "static/chunks/webpack-17daad0d7d4f155c.js",
+      "static/chunks/framework-292291387d6b2e39.js",
+      "static/chunks/main-5476583c54cefe2b.js",
+      "static/chunks/pages/index-66e549bba4d2035e.js"
+    ],
+    "/_app": [
+      "static/chunks/webpack-17daad0d7d4f155c.js",
+      "static/chunks/framework-292291387d6b2e39.js",
+      "static/chunks/main-5476583c54cefe2b.js",
+      "static/css/d78da678926d89c8.css",
+      "static/chunks/pages/_app-cc1b9e2106a0bf21.js"
+    ],
+    "/_error": [
+      "static/chunks/webpack-17daad0d7d4f155c.js",
+      "static/chunks/framework-292291387d6b2e39.js",
+      "static/chunks/main-5476583c54cefe2b.js",
+      "static/chunks/pages/_error-cf5db1610f7a1281.js"
+    ],
+    "/login": [
+      "static/chunks/webpack-17daad0d7d4f155c.js",
+      "static/chunks/framework-292291387d6b2e39.js",
+      "static/chunks/main-5476583c54cefe2b.js",
+      "static/chunks/8-b6baefef4dabb518.js",
+      "static/chunks/pages/login-87e1a116e9a3f125.js"
+    ],
+    "/teacher": [
+      "static/chunks/webpack-17daad0d7d4f155c.js",
+      "static/chunks/framework-292291387d6b2e39.js",
+      "static/chunks/main-5476583c54cefe2b.js",
+      "static/chunks/pages/teacher-ed24f24c30948ea7.js"
+    ],
+    "/teacher/dashboard": [
+      "static/chunks/webpack-17daad0d7d4f155c.js",
+      "static/chunks/framework-292291387d6b2e39.js",
+      "static/chunks/main-5476583c54cefe2b.js",
+      "static/chunks/8-b6baefef4dabb518.js",
+      "static/chunks/pages/teacher/dashboard-6814079b0cc7e12a.js"
+    ],
+    "/teacher/login": [
+      "static/chunks/webpack-17daad0d7d4f155c.js",
+      "static/chunks/framework-292291387d6b2e39.js",
+      "static/chunks/main-5476583c54cefe2b.js",
+      "static/chunks/8-b6baefef4dabb518.js",
+      "static/chunks/pages/teacher/login-d68dbd458dc30aaa.js"
+    ]
+  },
+  "ampFirstPages": []
+}

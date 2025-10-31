@@ -1,0 +1,16 @@
+{
+  "/_app": "pages/_app.js",
+  "/api/forms/[id]": "pages/api/forms/[id].js",
+  "/_error": "pages/_error.js",
+  "/api/auth/login": "pages/api/auth/login.js",
+  "/": "pages/index.html",
+  "/teacher/dashboard": "pages/teacher/dashboard.html",
+  "/api/forms": "pages/api/forms.js",
+  "/api/auth/profile": "pages/api/auth/profile.js",
+  "/login": "pages/login.html",
+  "/api/auth/register": "pages/api/auth/register.js",
+  "/teacher/login": "pages/teacher/login.html",
+  "/teacher": "pages/teacher.html",
+  "/_document": "pages/_document.js",
+  "/404": "pages/404.html"
+}
