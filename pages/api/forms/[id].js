@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   // GET /api/forms/:id - Get a specific form
   if (req.method === 'GET') {
     try {
-      const form = await Form.findById(id, 'title description googleFormUrl dueDate createdAt updatedAt');
+      const form = await Form.findById(id, 'title description googleFormUrl dueDate createdAt updatedAt isActive');
       if (!form) {
         return res.status(404).json({ message: 'Form not found' });
       }
@@ -59,12 +59,15 @@ export default async function handler(req, res) {
         return res.status(403).json({ message: 'Forbidden' });
       }
 
-      const { title, description, googleFormUrl, dueDate } = req.body;
+      const { title, description, googleFormUrl, dueDate, isActive } = req.body;
 
-      // Validate Google Form URL
-      const embeddedUrl = validateGoogleFormUrl(googleFormUrl);
-      if (!embeddedUrl) {
-        return res.status(400).json({ message: 'Invalid Google Form URL' });
+      // Validate Google Form URL (if provided)
+      let embeddedUrl = form.googleFormUrl;
+      if (googleFormUrl) {
+        embeddedUrl = validateGoogleFormUrl(googleFormUrl);
+        if (!embeddedUrl) {
+          return res.status(400).json({ message: 'Invalid Google Form URL' });
+        }
       }
 
       // Update form
@@ -73,7 +76,8 @@ export default async function handler(req, res) {
         description: description || form.description,
         googleFormUrl: embeddedUrl,
         dueDate: dueDate ? new Date(dueDate) : form.dueDate,
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        isActive: isActive !== undefined ? isActive : form.isActive
       });
 
       await form.save();

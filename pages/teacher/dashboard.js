@@ -20,7 +20,7 @@ export default function TeacherDashboard() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-      router.push('/teacher/login');
+      router.push('/login');
       return;
     }
 
@@ -42,7 +42,7 @@ export default function TeacherDashboard() {
         setUser(userData);
       } else {
         localStorage.removeItem('token');
-        router.push('/teacher/login');
+        router.push('/login');
       }
     } catch (error) {
       console.error('Error mengambil data pengguna:', error);
@@ -70,7 +70,7 @@ export default function TeacherDashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    router.push('/teacher/login');
+    router.push('/login');
   };
 
   const openCreateForm = () => {
@@ -168,6 +168,42 @@ export default function TeacherDashboard() {
     });
   };
 
+  const isFormActive = (dueDate) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set ke awal hari
+    
+    const formDate = new Date(dueDate);
+    formDate.setHours(0, 0, 0, 0); // Set ke awal hari
+    
+    // Hanya aktif jika tanggal hari ini sama dengan tanggal pengerjaan
+    return today.getTime() === formDate.getTime();
+  };
+
+  const toggleFormStatus = async (formId, currentStatus) => {
+    const token = localStorage.getItem('token');
+    
+    try {
+      const response = await fetch(`/api/forms/${formId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ isActive: !currentStatus })
+      });
+
+      if (response.ok) {
+        fetchForms(token); // Refresh daftar formulir
+      } else {
+        const data = await response.json();
+        alert(data.message || 'Gagal mengubah status');
+      }
+    } catch (error) {
+      console.error('Error mengubah status formulir:', error);
+      alert('Terjadi kesalahan saat mengubah status formulir');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -224,16 +260,37 @@ export default function TeacherDashboard() {
               <div className="bg-white shadow overflow-hidden sm:rounded-md">
                 <ul className="divide-y divide-gray-200">
                   {forms.map((form) => (
-                    <li key={form._id}>
+                    <li key={form._id} className={form.isActive ? '' : 'bg-gray-50'}>
                       <div className="px-4 py-4 sm:px-6">
                         <div className="flex items-center justify-between">
                           <div className="text-sm font-medium text-indigo-600 truncate">
                             {form.title}
+                            {!form.isActive && (
+                              <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                Dinonaktifkan
+                              </span>
+                            )}
                           </div>
-                          <div className="ml-2 flex-shrink-0 flex">
-                            <p className="inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                              Berakhir: {new Date(form.dueDate).toLocaleDateString('id-ID')}
-                            </p>
+                          <div className="ml-2 flex-shrink-0 flex space-x-2">
+                            {isFormActive(form.dueDate) ? (
+                              <p className="inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Aktif
+                              </p>
+                            ) : (
+                              <p className="inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                Tidak Aktif
+                              </p>
+                            )}
+                            <button 
+                              onClick={() => toggleFormStatus(form._id, form.isActive)}
+                              className={`inline-flex text-xs leading-5 font-semibold rounded-full px-2 py-1 ${
+                                form.isActive 
+                                  ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' 
+                                  : 'bg-green-100 text-green-800 hover:bg-green-200'
+                              }`}
+                            >
+                              {form.isActive ? 'Disable' : 'Enable'}
+                            </button>
                           </div>
                         </div>
                         <div className="mt-2 sm:flex sm:justify-between">
@@ -243,6 +300,9 @@ export default function TeacherDashboard() {
                             </p>
                           </div>
                           <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                            <p className="mr-3">
+                              Tanggal Pengerjaan: {new Date(form.dueDate).toLocaleDateString('id-ID')}
+                            </p>
                             <button
                               onClick={() => openEditForm(form)}
                               className="mr-3 text-indigo-600 hover:text-indigo-900"
@@ -342,7 +402,7 @@ export default function TeacherDashboard() {
 
                     <div>
                       <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700">
-                        Tanggal Berakhir
+                        Tanggal Pengerjaan
                       </label>
                       <input
                         type="date"

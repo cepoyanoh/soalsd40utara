@@ -25,6 +25,17 @@ export default function Home() {
     window.open(formUrl, '_blank');
   };
 
+  const isFormActive = (dueDate) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set ke awal hari
+    
+    const formDate = new Date(dueDate);
+    formDate.setHours(0, 0, 0, 0); // Set ke awal hari
+    
+    // Hanya aktif jika tanggal hari ini sama dengan tanggal pengerjaan
+    return today.getTime() === formDate.getTime();
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -63,15 +74,31 @@ export default function Home() {
                     <p className="mt-2 text-sm text-gray-500">{form.description}</p>
                     <div className="mt-4">
                       <p className="text-sm text-gray-500">
-                        Berakhir: {new Date(form.dueDate).toLocaleDateString('id-ID')}
+                        Tanggal Pengerjaan: {new Date(form.dueDate).toLocaleDateString('id-ID')}
                       </p>
+                      <div className="mt-2">
+                        {isFormActive(form.dueDate) ? (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Aktif
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            Tidak Aktif
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <div className="mt-6">
                       <button
                         onClick={() => openForm(form.googleFormUrl)}
-                        className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        disabled={!isFormActive(form.dueDate)}
+                        className={`w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+                          isFormActive(form.dueDate)
+                            ? 'bg-indigo-600 hover:bg-indigo-700'
+                            : 'bg-gray-400 cursor-not-allowed'
+                        }`}
                       >
-                        Buka Formulir
+                        {isFormActive(form.dueDate) ? 'Buka Formulir' : 'Tidak Dapat Dikerjakan'}
                       </button>
                     </div>
                   </div>

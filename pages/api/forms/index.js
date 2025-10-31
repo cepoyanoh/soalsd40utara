@@ -6,10 +6,30 @@ import { verifyToken, validateGoogleFormUrl } from '../../../utils/auth';
 export default async function handler(req, res) {
   await connectDB();
 
-  // GET /api/forms - Get all forms (public)
+  // GET /api/forms - Get all forms (public - hanya form aktif)
   if (req.method === 'GET') {
+    // Cek apakah ini permintaan dari guru (dengan token)
+    const authHeader = req.headers.authorization;
+    
     try {
-      const forms = await Form.find({}, 'title description googleFormUrl dueDate createdAt updatedAt');
+      // Jika ada token, verifikasi apakah user adalah guru
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        const token = authHeader.substring(7);
+        const decoded = verifyToken(token);
+        
+        if (decoded) {
+          // Cari user
+          const user = await User.findById(decoded.userId);
+          // Jika user adalah guru, kirim semua form (aktif dan tidak aktif)
+          if (user && user.role === 'teacher') {
+            const forms = await Form.find({}, 'title description googleFormUrl dueDate createdAt updatedAt isActive');
+            return res.status(200).json(forms);
+          }
+        }
+      }
+      
+      // Untuk user biasa (siswa), hanya kirim form yang aktif
+      const forms = await Form.find({ isActive: true }, 'title description googleFormUrl dueDate createdAt updatedAt');
       return res.status(200).json(forms);
     } catch (error) {
       console.error(error);

@@ -1,8 +1,10 @@
 {
   "/_app": "pages/_app.js",
-  "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/teacher/dashboard": "pages/teacher/dashboard.js",
   "/": "pages/index.js",
-  "/teacher/login": "pages/teacher/login.js",
-  "/login": "pages/login.js"
+  "/api/forms": "pages/api/forms.js",
+  "/api/auth/profile": "pages/api/auth/profile.js",
+  "/api/forms/[id]": "pages/api/forms/[id].js"
 }
